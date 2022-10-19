@@ -35,7 +35,7 @@ class SignInFragment : Fragment() {
         val validPassword = binding.textInputLayoutPassword.helperText == null
 
         if(validEmail && validPassword){
-            this.findNavController().navigate(R.id.action_signInFragment_to_mainFragment)
+            this.findNavController().navigate(R.id.action_signInFragment_to_onBoardingFragment)
         }
     }
 
