@@ -1,7 +1,6 @@
 package com.example.googlemap.view.screen.onboarding
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,21 +24,21 @@ class OnBoardingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val sharedPreferences = activity?.getSharedPreferences("isAlreadySeen",
-            Context.MODE_PRIVATE)
+
         val queue: Queue<Int> =
-            LinkedList<Int>(listOf(R.drawable.number1, R.drawable.number2, R.drawable.number3))
+            LinkedList(listOf(R.drawable.number1, R.drawable.number2, R.drawable.number3))
         queue.poll()?.let { binding.imgView.setImageResource(it) }
 
         binding.btnNext.setOnClickListener {
             if (binding.btnNext.hint == "Начать") {
                 this.findNavController().navigate(R.id.action_onBoardingFragment_to_mainFragment)
-                val editor: SharedPreferences.Editor? = sharedPreferences?.edit()
-                if (editor != null) {
-                    editor.putBoolean("isAlready", true)
-                    editor.apply()
+                val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                if (sharedPref != null) {
+                    with(sharedPref.edit()) {
+                        putBoolean(getString(R.string.saved_onBoarding_bool), true)
+                        apply()
+                    }
                 }
-
 
             }
             queue.poll()?.let { binding.imgView.setImageResource(it) }
