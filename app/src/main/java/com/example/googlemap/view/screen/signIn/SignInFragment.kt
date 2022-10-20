@@ -2,6 +2,8 @@ package com.example.googlemap.view.screen.signIn
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -49,11 +51,14 @@ class SignInFragment : Fragment() {
     }
 
     private fun emailFocusListener() {
-        binding.etEmail.setOnFocusChangeListener { _, focused ->
-            if (!focused) {
+        binding.etEmail.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 binding.textInputLayoutEmail.helperText = validEmail()
             }
-        }
+            override fun afterTextChanged(p0: Editable?) {}
+
+        })
     }
 
     private fun validEmail(): String? {
@@ -66,11 +71,16 @@ class SignInFragment : Fragment() {
 
 
     private fun passwordFocusListener() {
-        binding.etPassword.setOnFocusChangeListener { _, focused ->
-            if (!focused) {
+        binding.etPassword.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 binding.textInputLayoutPassword.helperText = validPassword()
             }
-        }
+
+            override fun afterTextChanged(p0: Editable?) {}
+
+        })
     }
 
     private fun validPassword(): String? {
