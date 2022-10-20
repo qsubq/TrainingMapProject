@@ -29,6 +29,12 @@ class SignInFragment : Fragment() {
         emailFocusListener()
         passwordFocusListener()
         binding.btnLogin.setOnClickListener {
+            if (binding.etPassword.text.isNullOrEmpty()) {
+                binding.textInputLayoutPassword.helperText = "Required"
+            }
+            if (binding.etEmail.text.isNullOrEmpty()) {
+                binding.textInputLayoutEmail.helperText = "Required"
+            }
             submitForm()
         }
     }
@@ -51,11 +57,12 @@ class SignInFragment : Fragment() {
     }
 
     private fun emailFocusListener() {
-        binding.etEmail.addTextChangedListener(object :TextWatcher{
+        binding.etEmail.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 binding.textInputLayoutEmail.helperText = validEmail()
             }
+
             override fun afterTextChanged(p0: Editable?) {}
 
         })
@@ -71,7 +78,7 @@ class SignInFragment : Fragment() {
 
 
     private fun passwordFocusListener() {
-        binding.etPassword.addTextChangedListener(object :TextWatcher{
+        binding.etPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
