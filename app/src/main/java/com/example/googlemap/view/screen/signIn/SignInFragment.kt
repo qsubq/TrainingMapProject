@@ -42,12 +42,10 @@ class SignInFragment : Fragment() {
     private fun submitForm() {
         val validEmail = binding.textInputLayoutEmail.helperText == null
         val validPassword = binding.textInputLayoutPassword.helperText == null
-
         if (validEmail && validPassword) {
             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
             val isAlreadySeen: Boolean =
                 sharedPref.getBoolean(getString(R.string.saved_onBoarding_bool), false)
-
             if (isAlreadySeen) {
                 this.findNavController().navigate(R.id.action_signInFragment_to_mainFragment)
             } else {

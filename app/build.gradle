@@ -36,6 +36,12 @@ android {
 }
 
 dependencies {
+    //EasyPermissions
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
+    //OSM
+    implementation 'org.osmdroid:osmdroid-android:6.1.11'
+
     //Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
