@@ -2,21 +2,22 @@ package com.example.googlemap.view.screen.main
 
 import android.Manifest
 import android.os.Bundle
+import androidx.preference.PreferenceManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.example.googlemap.R
 import com.example.googlemap.databinding.FragmentMainBinding
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import org.osmdroid.config.Configuration.*
 
-//https://blog.mindorks.com/implementing-easy-permissions-in-android-android-tutorial
-
-class MainFragment : Fragment(),EasyPermissions.PermissionCallbacks,
-EasyPermissions.RationaleCallbacks {
+class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks,
+    EasyPermissions.RationaleCallbacks {
     private val TAG = "MainFragment"
     private val RC_LOCATION_PERM = 124
 
@@ -45,7 +46,14 @@ EasyPermissions.RationaleCallbacks {
 
     private fun locationTask() {
         if (hasLocationPermissions() == true) {
-            Toast.makeText(activity, "TODO: Location things", Toast.LENGTH_LONG).show()
+
+            getInstance().load(activity, PreferenceManager.getDefaultSharedPreferences(requireActivity()))
+
+            binding.map.setTileSource(TileSourceFactory.MAPNIK)
+            val mapController = binding.map.controller
+            mapController.setZoom(9.5)
+            val startPoint = GeoPoint(48.8583, 2.2944)
+            mapController.animateTo(startPoint)
         } else {
             // Ask for one permission
             EasyPermissions.requestPermissions(
@@ -64,9 +72,13 @@ EasyPermissions.RationaleCallbacks {
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         Log.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size)
 
-        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms))
-        {
-            AppSettingsDialog.Builder(this).build().show()
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            EasyPermissions.requestPermissions(
+                this,
+                getString(R.string.rationale_location),
+                RC_LOCATION_PERM,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
         }
     }
 
@@ -78,4 +90,13 @@ EasyPermissions.RationaleCallbacks {
         Log.d(TAG, "onRationaleDenied:" + requestCode)
     }
 
+    override fun onPause() {
+        super.onPause()
+        binding.map.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.map.onResume()
+    }
 }

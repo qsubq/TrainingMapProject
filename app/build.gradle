@@ -36,6 +36,8 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.preference:preference:1.2.0'
+
     //EasyPermissions
     implementation 'pub.devrel:easypermissions:3.0.0'
 
