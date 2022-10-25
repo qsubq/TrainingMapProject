@@ -2,6 +2,7 @@ package com.example.googlemap.view.screen.main
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.googlemap.R
 import com.example.googlemap.databinding.FragmentMainBinding
+import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
 //https://blog.mindorks.com/implementing-easy-permissions-in-android-android-tutorial
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(),EasyPermissions.PermissionCallbacks,
+EasyPermissions.RationaleCallbacks {
     private val TAG = "MainFragment"
     private val RC_LOCATION_PERM = 124
 
@@ -28,6 +31,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        locationTask()
     }
 
     private fun hasLocationPermissions(): Boolean? {
@@ -39,7 +43,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    fun locationTask() {
+    private fun locationTask() {
         if (hasLocationPermissions() == true) {
             Toast.makeText(activity, "TODO: Location things", Toast.LENGTH_LONG).show()
         } else {
@@ -51,6 +55,27 @@ class MainFragment : Fragment() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
         }
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        Log.d(TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size)
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        Log.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size)
+
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms))
+        {
+            AppSettingsDialog.Builder(this).build().show()
+        }
+    }
+
+    override fun onRationaleAccepted(requestCode: Int) {
+        Log.d(TAG, "onRationaleAccepted:" + requestCode)
+    }
+
+    override fun onRationaleDenied(requestCode: Int) {
+        Log.d(TAG, "onRationaleDenied:" + requestCode)
     }
 
 }
