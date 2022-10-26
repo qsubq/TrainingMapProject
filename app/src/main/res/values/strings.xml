@@ -7,5 +7,5 @@
     <string name="enter_password">Password</string>
     <string name="Contionous">Продолжить</string>
     <string name="saved_onBoarding_bool">keyForTheBool</string>
-    <string name="rationale_location">This app needs access to your location to know where you are.</string>
+    <string name="rationale_location">This app needs access to your location</string>
 </resources>

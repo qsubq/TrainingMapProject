@@ -1,20 +1,22 @@
 package com.example.googlemap.view.screen.main
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.location.Location
 import android.os.Bundle
-import androidx.preference.PreferenceManager
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.example.googlemap.R
 import com.example.googlemap.databinding.FragmentMainBinding
+import com.google.android.gms.location.LocationServices
+import org.osmdroid.config.Configuration.*
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import org.osmdroid.config.Configuration.*
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks,
     EasyPermissions.RationaleCallbacks {
@@ -46,23 +48,38 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks,
 
     private fun locationTask() {
         if (hasLocationPermissions() == true) {
-
-            getInstance().load(activity, PreferenceManager.getDefaultSharedPreferences(requireActivity()))
-
-            binding.map.setTileSource(TileSourceFactory.MAPNIK)
-            val mapController = binding.map.controller
-            mapController.setZoom(9.5)
-            val startPoint = GeoPoint(48.8583, 2.2944)
-            mapController.animateTo(startPoint)
+            initMap()
         } else {
-            // Ask for one permission
             EasyPermissions.requestPermissions(
                 this,
                 getString(R.string.rationale_location),
                 RC_LOCATION_PERM,
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
+            locationTask()
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun initMap() {
+        getInstance().load(
+            activity,
+            PreferenceManager.getDefaultSharedPreferences(requireActivity())
+        )
+        binding.map.setTileSource(TileSourceFactory.MAPNIK)
+        val mapController = binding.map.controller
+        mapController.setZoom(9.5)
+
+
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                val userPoint = GeoPoint(location)
+                mapController.animateTo(userPoint)
+            }
+
+
+        binding.map.setMultiTouchControls(true)
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
