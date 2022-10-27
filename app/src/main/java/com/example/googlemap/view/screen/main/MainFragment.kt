@@ -16,7 +16,9 @@ import com.google.android.gms.location.LocationServices
 import org.osmdroid.config.Configuration.*
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import pub.devrel.easypermissions.EasyPermissions
+
 
 class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks,
     EasyPermissions.RationaleCallbacks {
@@ -78,8 +80,11 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks,
                 mapController.animateTo(userPoint)
             }
 
-
         binding.map.setMultiTouchControls(true)
+
+        val mRotationGestureOverlay = RotationGestureOverlay(binding.map)
+        mRotationGestureOverlay.isEnabled = true
+        binding.map.overlays.add(mRotationGestureOverlay)
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
