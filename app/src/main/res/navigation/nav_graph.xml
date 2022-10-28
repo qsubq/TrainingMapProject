@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/containerFragment">
 
     <fragment
         android:id="@+id/signInFragment"
@@ -14,21 +14,21 @@
             android:id="@+id/action_signInFragment_to_onBoardingFragment"
             app:destination="@id/onBoardingFragment" />
         <action
-            android:id="@+id/action_signInFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_signInFragment_to_containerFragment"
+            app:destination="@id/containerFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.googlemap.view.screen.main.MainFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
     <fragment
         android:id="@+id/onBoardingFragment"
         android:name="com.example.googlemap.view.screen.onboarding.OnBoardingFragment"
         android:label="fragment_on_boarding"
         tools:layout="@layout/fragment_on_boarding" >
         <action
-            android:id="@+id/action_onBoardingFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_onBoardingFragment_to_containerFragment"
+            app:destination="@id/containerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/containerFragment"
+        android:name="com.example.googlemap.view.screen.containerFragment.ContainerFragment"
+        android:label="fragment_container"
+        tools:layout="@layout/fragment_container" />
 </navigation>

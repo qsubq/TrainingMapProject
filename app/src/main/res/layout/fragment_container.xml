@@ -16,6 +16,7 @@
         android:id="@+id/tbLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabIndicatorHeight="4dp"
         app:tabGravity="fill"
         app:tabIndicator="@color/teal_700"
         app:tabSelectedTextColor="@color/teal_700" />

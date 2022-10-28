@@ -47,7 +47,7 @@ class SignInFragment : Fragment() {
             val isAlreadySeen: Boolean =
                 sharedPref.getBoolean(getString(R.string.saved_onBoarding_bool), false)
             if (isAlreadySeen) {
-                this.findNavController().navigate(R.id.action_signInFragment_to_mainFragment)
+                this.findNavController().navigate(R.id.action_signInFragment_to_containerFragment)
             } else {
                 this.findNavController().navigate(R.id.action_signInFragment_to_onBoardingFragment)
             }

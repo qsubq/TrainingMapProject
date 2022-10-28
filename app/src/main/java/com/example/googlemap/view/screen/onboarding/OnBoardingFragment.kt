@@ -31,7 +31,7 @@ class OnBoardingFragment : Fragment() {
 
         binding.btnNext.setOnClickListener {
             if (binding.btnNext.hint == "Начать") {
-                this.findNavController().navigate(R.id.action_onBoardingFragment_to_mainFragment)
+                this.findNavController().navigate(R.id.action_onBoardingFragment_to_containerFragment)
                 val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
                 if (sharedPref != null) {
                     with(sharedPref.edit()) {
