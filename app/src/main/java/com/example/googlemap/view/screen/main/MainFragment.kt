@@ -2,7 +2,6 @@ package com.example.googlemap.view.screen.main
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.example.googlemap.R
 import com.example.googlemap.databinding.FragmentMainBinding
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import org.osmdroid.config.Configuration.*
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -24,6 +24,7 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks,
     EasyPermissions.RationaleCallbacks {
     private val TAG = "MainFragment"
     private val RC_LOCATION_PERM = 124
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var binding: FragmentMainBinding
     override fun onCreateView(
@@ -32,10 +33,13 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks,
     ): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         return binding.root
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         locationTask()
     }
 
@@ -72,15 +76,16 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks,
         val mapController = binding.map.controller
         mapController.setZoom(9.5)
 
+        binding.map.setMultiTouchControls(true)
 
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                val userPoint = GeoPoint(location)
-                mapController.animateTo(userPoint)
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    mapController.animateTo(GeoPoint(location))
+                }
             }
 
-        binding.map.setMultiTouchControls(true)
+
 
         val mRotationGestureOverlay = RotationGestureOverlay(binding.map)
         mRotationGestureOverlay.isEnabled = true
@@ -121,4 +126,5 @@ class MainFragment : Fragment(), EasyPermissions.PermissionCallbacks,
         super.onResume()
         binding.map.onResume()
     }
+
 }
