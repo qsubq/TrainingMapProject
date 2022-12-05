@@ -11,7 +11,6 @@ import com.example.googlemap.R
 import com.example.googlemap.databinding.FragmentOnBoardingBinding
 import java.util.*
 
-
 class OnBoardingFragment : Fragment() {
     private lateinit var binding: FragmentOnBoardingBinding
     override fun onCreateView(
@@ -39,7 +38,6 @@ class OnBoardingFragment : Fragment() {
                         apply()
                     }
                 }
-
             }
             queue.poll()?.let { binding.imgView.setImageResource(it) }
             if (queue.isEmpty()) {
